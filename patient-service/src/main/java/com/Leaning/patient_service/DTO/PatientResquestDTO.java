@@ -1,5 +1,6 @@
 package com.Leaning.patient_service.DTO;
 
+import com.Leaning.patient_service.DTO.validators.CreatePatientValidationGroup;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -16,7 +17,7 @@ public class PatientResquestDTO {
     @Size(max = 15, message = "name can't be more then 15 char long")
     private String name;
 
-    @NotBlank(message = "Email is required")
+    @NotBlank(groups = CreatePatientValidationGroup.class,message = "Email is required")
     @Email(message = "Email should be valid")
     private String email;
 
