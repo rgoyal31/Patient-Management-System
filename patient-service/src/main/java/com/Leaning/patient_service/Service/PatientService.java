@@ -7,6 +7,7 @@ import com.Leaning.patient_service.Exception.PatientNotFoundException;
 import com.Leaning.patient_service.Mapper.PatientMapper;
 import com.Leaning.patient_service.Model.Patient;
 import com.Leaning.patient_service.Repo.PatientRepo;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -58,5 +59,11 @@ public class PatientService {
         patientRepo.save(patient);
 
         return PatientMapper.ToResponseDTO(patient);
+    }
+
+    @Transactional
+    public void deletePatient(String email){
+        patientRepo.deleteByEmail(email);
+        return;
     }
 }

@@ -38,4 +38,10 @@ public class PatientController {
                                                             @Validated({Default.class}) @RequestBody PatientResquestDTO patientResquestDTO){
         return ResponseEntity.ok(patientService.updatePatient(email,patientResquestDTO));
     }
+
+    @DeleteMapping(path = "/{email}")
+    public ResponseEntity<?> deletePatient(@PathVariable String email){
+        patientService.deletePatient(email);
+        return ResponseEntity.ok("Deletion SuccessFull");
+    }
 }
