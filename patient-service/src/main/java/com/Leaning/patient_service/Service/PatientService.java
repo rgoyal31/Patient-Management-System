@@ -2,6 +2,7 @@ package com.Leaning.patient_service.Service;
 
 import com.Leaning.patient_service.DTO.PatientResponseDTO;
 import com.Leaning.patient_service.DTO.PatientResquestDTO;
+import com.Leaning.patient_service.Exception.EmailAlreadyExistsException;
 import com.Leaning.patient_service.Mapper.PatientMapper;
 import com.Leaning.patient_service.Model.Patient;
 import com.Leaning.patient_service.Repo.PatientRepo;
@@ -30,6 +31,10 @@ public class PatientService {
     }
 
     public PatientResponseDTO registerPatient(PatientResquestDTO patientResquestDTO){
+        if(patientRepo.existsByEmail(patientResquestDTO.getEmail())){
+            //will throw a custom exception
+            throw new EmailAlreadyExistsException("A Patient with the email already exist " + patientResquestDTO.getEmail());
+        }
         Patient newPatient = patientRepo.save(PatientMapper.ToPatient(patientResquestDTO));
         return PatientMapper.ToResponseDTO(newPatient);
     }
