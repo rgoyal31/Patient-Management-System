@@ -1,5 +1,6 @@
 package com.Leaning.patient_service.Service;
 
+import billing.BillingServiceGrpc;
 import com.Leaning.patient_service.DTO.PatientResponseDTO;
 import com.Leaning.patient_service.DTO.PatientResquestDTO;
 import com.Leaning.patient_service.Exception.EmailAlreadyExistsException;
@@ -7,6 +8,7 @@ import com.Leaning.patient_service.Exception.PatientNotFoundException;
 import com.Leaning.patient_service.Mapper.PatientMapper;
 import com.Leaning.patient_service.Model.Patient;
 import com.Leaning.patient_service.Repo.PatientRepo;
+import com.Leaning.patient_service.grpc.BillingServiceGrpcClient;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,10 +23,13 @@ import java.util.UUID;
 public class PatientService {
 
     private final PatientRepo patientRepo;
+    private final BillingServiceGrpcClient billingServiceGrpcClient;
 
-    public PatientService(PatientRepo patientRepo){
+    public PatientService(PatientRepo patientRepo, BillingServiceGrpcClient billingServiceGrpcClient){
         this.patientRepo = patientRepo;
+        this.billingServiceGrpcClient = billingServiceGrpcClient;
     }
+
 
     public List<PatientResponseDTO> getAllPatient(){
         log.info("Starting the Service Class");
@@ -41,6 +46,10 @@ public class PatientService {
             throw new EmailAlreadyExistsException("A Patient with the email already exist " + patientResquestDTO.getEmail());
         }
         Patient newPatient = patientRepo.save(PatientMapper.ToPatient(patientResquestDTO));
+
+        billingServiceGrpcClient.createBillingAccount(newPatient.getId().toString(),
+                newPatient.getName(), newPatient.getEmail());
+
         return PatientMapper.ToResponseDTO(newPatient);
     }
 

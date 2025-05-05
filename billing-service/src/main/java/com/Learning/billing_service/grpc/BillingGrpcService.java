@@ -5,7 +5,6 @@ import billing.BillingResponse;
 import billing.BillingServiceGrpc.BillingServiceImplBase;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
-import lombok.extern.slf4j.XSlf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
 
 @GrpcService
@@ -13,7 +12,7 @@ import net.devh.boot.grpc.server.service.GrpcService;
 public class BillingGrpcService extends BillingServiceImplBase{
 
     @Override
-    public void CreateBillingAccount(BillingRequest billingRequest,
+    public void createBillingAccount(BillingRequest billingRequest,
                                      StreamObserver<billing.BillingResponse> responseObserver){
 
         log.info("createBilling Account Request Received {}", billingRequest.toString());
